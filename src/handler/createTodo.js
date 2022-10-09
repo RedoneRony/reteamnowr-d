@@ -22,7 +22,7 @@ module.exports.createTodo = (event, context, callback) => {
     }
 
     const params = {
-        TableName: 'todos',
+        TableName: 'Test',
         Item: {
             id: uuid.v1(),
             task: data.task,
@@ -39,11 +39,11 @@ module.exports.createTodo = (event, context, callback) => {
             return;
         }
 
+        
         const response = {
             statusCode: 201,
             body: JSON.stringify(data.Item)
         };
-
         callback(null, response);
     });
 }

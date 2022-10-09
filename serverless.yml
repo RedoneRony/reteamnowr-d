@@ -21,6 +21,8 @@ provider:
           Resource:
             - Fn::GetAtt: [ UsersTable, Arn ]
             - Fn::Join: ['/', ["Fn::GetAtt": [ UsersTable, Arn ], 'index', 'statusAndCreatedAt']]
+            - arn:aws:dynamodb:us-east-1:*:*
+            - arn:aws:lambda:us-east-1:*:* # Had to add this too
   environment:
     USERS_TABLE: ${self:custom.tableName}
 
@@ -30,35 +32,35 @@ functions:
     events:
       - httpApi: '*'
   create:
-    handler: /handler/createTodo.createTodo
+    handler: src/handler/createTodo.createTodo
     events:
       - http:
           path: todos
           method: post
           cors: true
   list:
-    handler: /handler/listTodo.listTodo
+    handler: src/handler/listTodo.listTodo
     events:
       - http:
           path: todos
           method: get
           cors: true
   get:
-    handler: /handler/getTodo.getTodo
+    handler: src/handler/getTodo.getTodo
     events:
       - http:
           path: todos/{id}
           method: get
           cors: true
   update:
-    handler: /handler/updateTodo.updateTodo
+    handler: src/handler/updateTodo.updateTodo
     events:
       - http:
           path: todos/{id}
           method: put
           cors: true
   delete:
-    handler: /handler/deleteTodo.deleteTodo
+    handler: src/handler/deleteTodo.deleteTodo
     events:
       - http:
           path: todos/{id}
@@ -91,8 +93,8 @@ resources:
               ProjectionType: ALL
         BillingMode: PAY_PER_REQUEST
         TableName: ${self:custom.tableName}
-        
-    TodosTable:
+
+    TestTable:
       Type: 'AWS::DynamoDB::Table'
       DeletionPolicy: Retain
       Properties:
@@ -107,4 +109,4 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-        TableName: 'todos'
+        TableName: 'Test'

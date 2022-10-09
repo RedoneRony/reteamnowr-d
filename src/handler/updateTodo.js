@@ -21,7 +21,7 @@ module.exports.updateTodo = (event, context, callback) => {
     }
 
     const params = {
-        TableName: 'todos',
+        TableName: 'Test',
         Key: {
             id: event.pathParameters.id
         },
