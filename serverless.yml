@@ -29,6 +29,41 @@ functions:
     handler: userHandler.handler
     events:
       - httpApi: '*'
+  create:
+    handler: /handler/createTodo.createTodo
+    events:
+      - http:
+          path: todos
+          method: post
+          cors: true
+  list:
+    handler: /handler/listTodo.listTodo
+    events:
+      - http:
+          path: todos
+          method: get
+          cors: true
+  get:
+    handler: /handler/getTodo.getTodo
+    events:
+      - http:
+          path: todos/{id}
+          method: get
+          cors: true
+  update:
+    handler: /handler/updateTodo.updateTodo
+    events:
+      - http:
+          path: todos/{id}
+          method: put
+          cors: true
+  delete:
+    handler: /handler/deleteTodo.deleteTodo
+    events:
+      - http:
+          path: todos/{id}
+          method: delete
+          cors: true
 
 resources:
   Resources:
@@ -56,3 +91,20 @@ resources:
               ProjectionType: ALL
         BillingMode: PAY_PER_REQUEST
         TableName: ${self:custom.tableName}
+        
+    TodosTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: id
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: 'todos'
